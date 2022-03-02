@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
             findViewById<Button>(R.id.btn).text = model.text
         }
 
-        val s = Obx("123")
+        val s = "123".obx
         println("s:${s.value}")
         s.subscribe{
             println("s2:${s.value}")

@@ -4,6 +4,9 @@ import android.view.View
 import androidx.core.view.doOnDetach
 import androidx.lifecycle.LifecycleOwner
 
+val <T : Any> T.obx : Obx<T>
+    get() = Obx(this)
+
 fun <T : Any> T.update(init : T.() -> Unit){
     this.init()
     ObxManager.instance.update(this as Any)
