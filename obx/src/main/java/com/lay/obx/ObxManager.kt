@@ -3,30 +3,22 @@ package com.lay.obx
 import androidx.lifecycle.Lifecycle
 
 internal class ObxManager private constructor(){
-    private val listenerMap = HashMap<Int, ArrayList<OnDataChangeListener>>()
+    private val listenerMap = HashMap<Long, ArrayList<OnDataChangeListener>>()
     companion object{
         val instance = ObxManager()
     }
 
-    fun createObserve(any : Any){
-        var listenerList = listenerMap[any.hashCode()]
+    fun <T> subscribe(obx : Obx<T>, listener: OnDataChangeListener){
+        var listenerList = listenerMap[obx.code]
         if(listenerList == null){
             listenerList = ArrayList()
-            listenerMap[any.hashCode()] = listenerList
-        }
-    }
-
-    fun subscribe(any : Any, listener: OnDataChangeListener){
-        var listenerList = listenerMap[any.hashCode()]
-        if(listenerList == null){
-            listenerList = ArrayList()
-            listenerMap[any.hashCode()] = listenerList
+            listenerMap[obx.code] = listenerList
         }
         listenerList.add(listener)
     }
 
-    fun update(any : Any){
-        var listenerList = listenerMap[any.hashCode()]
+    fun <T> update(obx : Obx<T>){
+        var listenerList = listenerMap[obx.code]
         listenerList?.let {
             it.forEach {
                 it.update()
@@ -35,7 +27,7 @@ internal class ObxManager private constructor(){
     }
 
     fun clear(any : Any){
-        listenerMap.remove(any.hashCode())
+        listenerMap.remove(any)
     }
 
     fun remove(listener: OnDataChangeListener) : Boolean{

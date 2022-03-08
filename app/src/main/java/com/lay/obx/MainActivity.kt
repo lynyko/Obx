@@ -20,17 +20,5 @@ class MainActivity : AppCompatActivity() {
                 startActivity(Intent(this@MainActivity, SecondActivity::class.java))
             }
         }
-        model.subscribe{
-            findViewById<Button>(R.id.btn).text = model.text
-        }
-
-        val s = "123".obx
-        println("s:${s.value}")
-        s.subscribe{
-            println("s2:${s.value}")
-        }
-        s.update {
-            value = "113"
-        }
     }
 }

@@ -7,12 +7,12 @@ import androidx.lifecycle.LifecycleOwner
 val <T : Any> T.obx : Obx<T>
     get() = Obx(this)
 
-fun <T : Any> T.update(init : T.() -> Unit){
+fun <T> Obx<T>.update(init : Obx<T>.() -> Unit){
     this.init()
-    ObxManager.instance.update(this as Any)
+    ObxManager.instance.update(this)
 }
 
-fun Any.subscribe(listener: OnDataChangeListener) : OnDataChangeListener{
+fun <T> Obx<T>.subscribe(listener: OnDataChangeListener) : OnDataChangeListener{
     ObxManager.instance.subscribe(this, listener)
     return listener
 }
