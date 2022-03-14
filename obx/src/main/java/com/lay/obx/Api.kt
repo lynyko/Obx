@@ -1,41 +1,49 @@
 package com.lay.obx
 
-import android.view.View
-import androidx.core.view.doOnDetach
+import android.content.Context
 import androidx.lifecycle.LifecycleOwner
 
 val <T : Any> T.obx : Obx<T>
-    get() = Obx(this)
+    get() = Obx(this, key = this::class.java.name)
 
-fun <T> Obx<T>.update(init : Obx<T>.() -> Unit){
+fun <T : Any> T.obx(key : String) : Obx<T>{
+    return Obx(this, key = key)
+}
+
+inline fun <reified T : Any> obx() : Obx<T>{
+    val obx = Obx<T>()
+    obx.key = T::class.java.name
+    return obx
+}
+
+inline fun <reified T : Any> Obx<T>.bind(lifecycleOwner: LifecycleOwner) : Obx<T>{
+    if(this.key == ""){
+        this.key = T::class.java.name
+    }
+    ObxManager.instance.addObxWithLifecycleOwner(lifecycleOwner.hashCode(), this)
+    return this
+}
+
+fun <T : Any> Context.findObx(key : String) : Obx<T>?{
+    return ObxManager.instance.findWithLifecycleOwner(hashCode(), key)
+}
+
+fun <T : Any> Context.findObx(clz : Class<T>) : Obx<T>?{
+    return findObx(clz.name)
+}
+
+
+fun <T : Any> Obx<T>.update(init: Obx<T>.() -> Unit) {
     this.init()
     ObxManager.instance.update(this)
 }
 
-fun <T> Obx<T>.subscribe(listener: OnDataChangeListener) : OnDataChangeListener{
+fun <T : Any> Obx<T>.subscribe(listener: OnDataChangeListener<T>): Obx<T> {
     ObxManager.instance.subscribe(this, listener)
-    return listener
-}
-
-fun OnDataChangeListener.bind(lifecycleOwner: LifecycleOwner){
-    lifecycleOwner.lifecycle.addObserver(ObxLifeCycleObserver(this))
-}
-
-fun OnDataChangeListener.bind(view: View){
-    view.doOnDetach {
-        ObxManager.instance.remove(this)
-    }
-}
-
-fun OnDataChangeListener.init() : OnDataChangeListener{
-    this.update()
     return this
 }
 
-fun OnDataChangeListener.remove(){
-    ObxManager.instance.remove(this)
-}
-
-fun Any.clear(){
-    ObxManager.instance.clear(this)
+fun <T : Any> Obx<T>.init(): Obx<T> {
+    ObxManager.instance.update(this)
+    return this
 }

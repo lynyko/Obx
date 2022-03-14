@@ -1,3 +1,7 @@
 package com.lay.obx
 
-data class Obx<T>(var value : T, internal val code : Long = (Math.random() * 100000000).toLong())
+private var privateCode = 1L
+data class Obx<T>(
+    var value : T? = null,
+    var key : String = "",
+    internal val code : Long = privateCode++)
