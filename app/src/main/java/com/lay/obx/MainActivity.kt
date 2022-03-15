@@ -1,26 +1,46 @@
 package com.lay.obx
 
-import android.content.Intent
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import com.lay.obx.*
-import com.lay.obx.second.SecondActivity
+import android.util.AttributeSet
+import android.view.Gravity
+import android.widget.LinearLayout
+import com.lay.obx.viewex.*
+import com.lay.obx.viewex.view.Button
 
 class MainActivity : AppCompatActivity() {
-    companion object{
-        val model = Model("点击")
-    }
+
+    val textObx = 1.obx
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        model.obx.subscribe{
+        textObx.bind(this)
+        setContentView(ContentView(this))
+    }
+}
+
+private class ContentView(context: Context, attributes: AttributeSet? = null) : LinearLayout(context, attributes){
+    init {
+        orientation = VERTICAL
+        widthAndHeight(MATHPARENT, MATHPARENT)
+        gravity = Gravity.CENTER
+        val textObx = context.findObx(Int::class.java)
+        TextView("1"){
+            gravity = Gravity.CENTER
+            textObx?.subscribe{
+                text = "${it.value}"
+            }?.init()
         }
-        findViewById<Button>(R.id.btn).run{
-            text = model.text
+        Button {
+            width(200.dp)
+            text = "点击"
+            textSize = 15F
             setOnClickListener {
-                startActivity(Intent(this@MainActivity, SecondActivity::class.java))
+                textObx?.update {
+                    value = value!! + 1
+                }
             }
         }
     }
+
 }

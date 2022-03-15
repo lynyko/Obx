@@ -29,7 +29,8 @@ fun <T : Any> Context.findObx(key : String) : Obx<T>?{
 }
 
 fun <T : Any> Context.findObx(clz : Class<T>) : Obx<T>?{
-    return findObx(clz.name)
+    val c = if(clz == Int::class.java) Integer::class.java else clz
+    return findObx(c.name)
 }
 
 

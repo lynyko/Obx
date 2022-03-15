@@ -15,6 +15,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 
+val MATHPARENT = ViewGroup.LayoutParams.MATCH_PARENT
+val WRAPCONTENT = ViewGroup.LayoutParams.WRAP_CONTENT
+
 /**
  * 设置View的高度
  */
