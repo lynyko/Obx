@@ -2,22 +2,12 @@ package com.lay.obx.second
 
 import android.content.Context
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.util.AttributeSet
-import android.view.Gravity
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
-import androidx.annotation.RequiresApi
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.lay.obx.*
-import com.lay.obx.viewex.children
-import com.lay.obx.viewex.warpContent
-import com.lay.obx.viewex.widthAndHeight
+import com.lay.obx.viewex.*
 
 class SecondActivity : AppCompatActivity() {
 
@@ -53,50 +43,23 @@ class SecondActivity : AppCompatActivity() {
         findObx(Model::class.java)?.subscribe{
             Toast.makeText(this, "${it.value?.text}", Toast.LENGTH_SHORT).show()
         }?.init()
+
+        ItemView(this)
     }
 }
 
-class TestView(context: Context, attributeSet: AttributeSet? = null) : LinearLayout(context){
-    init{
-        orientation = HORIZONTAL
-        widthAndHeight(warpContent, warpContent)
-        layoutDirection = LAYOUT_DIRECTION_RTL
-        children(
-            TextView(context).apply {
-                layoutParams = LayoutParams(warpContent, warpContent)
-                text = "123"
-                textSize = 20F
-                setTextColor(Color.RED)
-            },
-            TextView(context).apply {
-                layoutParams = LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-            },
-            TextView(context).apply {
-                text = "789"
-            },
-        )
-    }
-}
-
-class TestView2(context: Context) : LinearLayout(context){
-    init{
-        orientation = VERTICAL
-        gravity = Gravity.LEFT
-        children(
-            TextView(context).apply {
-                layoutParams = LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-                width = ViewGroup.LayoutParams.WRAP_CONTENT
-                text = "111"
-            },
-            TextView(context).apply {
-                layoutParams = LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-                text = "451223236"
-            },
-            TextView(context).apply {
-                layoutParams = LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-                text = "7232323189"
-            },
-            TestView(context)
-        )
+private class ItemView(context: Context, attributeSet: AttributeSet? = null) : LinearLayout(context){
+    init {
+        paddingDp(15)
+        TextView("应急响应名称") {
+            textColor = Color.parseColor("#0F1114")
+            textSizeSp = 15F
+            (layoutParams as LayoutParams).weight = 1F
+        }
+        TextView {
+            hint = "请输入"
+            textColor = Color.parseColor("#0F1114")
+            textSizeSp = 15F
+        }
     }
 }

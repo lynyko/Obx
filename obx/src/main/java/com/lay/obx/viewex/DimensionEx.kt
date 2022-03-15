@@ -10,3 +10,6 @@ private fun dp2px(value: Float, res: Resources = Resources.getSystem()): Float =
 
 val Int.dp: Int
     get() = dp2px(this.toFloat()).toInt()
+
+val Float.dp: Float
+    get() = dp2px(this)
