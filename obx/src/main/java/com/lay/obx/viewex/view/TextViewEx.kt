@@ -2,14 +2,20 @@ package com.lay.obx.viewex
 
 import android.util.TypedValue
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 
-fun ViewGroup.TextView(init: (TextView).() -> Unit) {
-    addView(TextView(context).apply(init))
+inline fun <reified T : ViewGroup> T.TextView(init: (TextView).() -> Unit) {
+    addView(TextView(context)
+        .apply { layoutParams = initLayoutParams(this@TextView) }
+        .apply(init))
 }
 
 fun ViewGroup.TextView(string: CharSequence, init: (TextView).() -> Unit) {
-    addView(TextView(context).apply { text = string }.apply(init))
+    addView(TextView(context).apply {
+        text = string
+        layoutParams = initLayoutParams(this@TextView)
+    }.apply(init))
 }
 
 var TextView.textColor: Int
@@ -18,7 +24,7 @@ var TextView.textColor: Int
         this.setTextColor(value)
     }
 
-var TextView.textSizeSp : Float
+var TextView.textSizeSp: Float
     get() {
         return this.textSize
     }
