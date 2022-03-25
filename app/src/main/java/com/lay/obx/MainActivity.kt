@@ -15,11 +15,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         textObx.bind(this)
-        setContentView(ContentView(this))
+        setContentView(R.layout.activity_main)
     }
 }
 
-private class ContentView(context: Context, attributes: AttributeSet? = null) : LinearLayout(context, attributes){
+class ContentView(context: Context, attributes: AttributeSet? = null) : LinearLayout(context, attributes){
     init {
         orientation = VERTICAL
         widthAndHeight(MATHPARENT, MATHPARENT)
