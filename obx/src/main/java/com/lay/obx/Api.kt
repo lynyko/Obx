@@ -16,11 +16,14 @@ inline fun <reified T : Any> obx() : Obx<T>{
     return obx
 }
 
-inline fun <reified T : Any> Obx<T>.bind(lifecycleOwner: LifecycleOwner) : Obx<T>{
+inline fun <reified T : Any> Obx<T>.bind(context: Context) : Obx<T>{
     if(this.key == ""){
         this.key = T::class.java.name
     }
-    ObxManager.instance.addObxWithLifecycleOwner(lifecycleOwner.hashCode(), this)
+    ObxManager.instance.addObxWithLifecycleOwner(context.hashCode(), this)
+    if(context is LifecycleOwner){
+        context.lifecycle.addObserver(ObxLifeCycleObserver(context.hashCode()))
+    }
     return this
 }
 
@@ -44,7 +47,8 @@ fun <T : Any> Obx<T>.subscribe(listener: OnDataChangeListener<T>): Obx<T> {
     return this
 }
 
-fun <T : Any> Obx<T>.init(): Obx<T> {
+fun <T : Any> Obx<T>.init(block : () -> Unit): Obx<T> {
+    block()
     ObxManager.instance.update(this)
     return this
 }

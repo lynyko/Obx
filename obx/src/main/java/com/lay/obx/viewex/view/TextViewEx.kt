@@ -7,14 +7,12 @@ import android.widget.TextView
 
 inline fun <reified T : ViewGroup> T.TextView(init: (TextView).() -> Unit) {
     addView(TextView(context)
-        .apply { layoutParams = initLayoutParams(this@TextView) }
         .apply(init))
 }
 
 fun ViewGroup.TextView(string: CharSequence, init: (TextView).() -> Unit) {
     addView(TextView(context).apply {
         text = string
-        layoutParams = initLayoutParams(this@TextView)
     }.apply(init))
 }
 

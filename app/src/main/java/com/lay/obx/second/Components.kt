@@ -16,33 +16,34 @@ import com.lay.obx.Model
 import com.lay.obx.findObx
 import com.lay.obx.init
 import com.lay.obx.subscribe
-import com.lay.obx.viewex.MATHPARENT
-import com.lay.obx.viewex.initLayoutParams
+import com.lay.obx.viewex.*
 import com.lay.obx.viewex.view.Button
 import com.lay.obx.viewex.view.RecyclerView
-import com.lay.obx.viewex.width
 
-class PairButtonComponents(context: Context, attributeSet: AttributeSet) : LinearLayout(context) {
+class PairButtonComponents(context: Context, attributeSet: AttributeSet? = null) : LinearLayout(context, attributeSet) {
     init {
-        layoutParams = initLayoutParams(this)
         orientation = VERTICAL
         val obx = context.findObx(Int::class.java)
-        Button("left") {
-            obx?.subscribe{
-                text = "${it.value}"
-            }?.init()
-            textSize = 20F
-            setTextColor(Color.RED)
+        linearParams {
+            width = MATHPARENT
         }
-
         val list = ArrayList<Int>()
+        list.add(1)
+        list.add(2)
+        list.add(3)
+        list.add(4)
+        list.add(5)
         val myAdapter = MyAdapter(context, list)
         RecyclerView {
+            linearParams {
+                width = MATHPARENT
+            }
             obx?.subscribe{
                 list.add(it.value!!)
                 myAdapter.notifyDataSetChanged()
-            }?.init()
-            width(MATHPARENT)
+            }?.init{
+                list.clear()
+            }
             adapter = myAdapter
         }
 
@@ -50,7 +51,13 @@ class PairButtonComponents(context: Context, attributeSet: AttributeSet) : Linea
 
     private class MyAdapter(var context: Context, var list : ArrayList<Int>) : RecyclerView.Adapter<MyViewHolder>(){
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-            val tv = TextView(context)
+            val tv = TextView(context).apply {
+                gravity = Gravity.CENTER
+                viewgroupParams {
+                    width = MATHPARENT
+                    height = 40.dp
+                }
+            }
             return MyViewHolder(tv)
         }
 

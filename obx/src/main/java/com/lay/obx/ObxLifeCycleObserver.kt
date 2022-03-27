@@ -5,10 +5,10 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 
 
-class ObxLifeCycleObserver : LifecycleObserver {
+class ObxLifeCycleObserver(var hashCode : Int) : LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     fun onDestroy(){
-        ObxManager.instance.removeObxWithLifecycleOwner(hashCode())
+        ObxManager.instance.removeObxWithLifecycleOwner(hashCode)
     }
 }

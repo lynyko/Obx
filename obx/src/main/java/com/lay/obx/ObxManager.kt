@@ -10,7 +10,6 @@ internal class ObxManager private constructor(){
     }
 
     fun addObxWithLifecycleOwner(hashCode : Int, obx : Obx<out Any>) : Boolean{
-        println("addObxWithLifecycleOwner:$hashCode,${obx.key}")
         var obxSubMap = obxMap[hashCode]
         if(obxSubMap == null){
             obxSubMap = HashMap()
@@ -25,7 +24,6 @@ internal class ObxManager private constructor(){
     }
 
     fun removeObxWithLifecycleOwner(hashCode : Int){
-        println("removeObxWithLifecycleOwner:$hashCode")
         val obxSubMap = obxMap[hashCode]
         obxSubMap?.let{
             it.forEach {

@@ -1,19 +1,11 @@
 package com.lay.obx.viewex
 
-import android.animation.Animator
-import android.animation.IntEvaluator
-import android.animation.ValueAnimator
-import android.content.Context
-import android.content.res.Resources
-import android.graphics.Color
-import android.graphics.drawable.Drawable
-import android.graphics.drawable.GradientDrawable
-import android.graphics.drawable.StateListDrawable
-import android.os.Build
-import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.FrameLayout
+import android.widget.LinearLayout
+import androidx.constraintlayout.widget.ConstraintLayout
+import com.google.android.flexbox.FlexboxLayout
 
 val MATHPARENT = ViewGroup.LayoutParams.MATCH_PARENT
 val WRAPCONTENT = ViewGroup.LayoutParams.WRAP_CONTENT
@@ -111,4 +103,25 @@ fun View.paddingDp(
 ): View {
     setPadding(padding.dp, padding.dp, padding.dp, padding.dp)
     return this
+}
+
+fun View.linearParams(width : Int = WRAPCONTENT, height: Int = WRAPCONTENT, block: (LinearLayout.LayoutParams).() -> Unit) {
+    layoutParams = LinearLayout.LayoutParams(width, height).apply(block)
+}
+
+fun View.frameParams(width : Int = WRAPCONTENT, height: Int = WRAPCONTENT, block: (FrameLayout.LayoutParams).() -> Unit) {
+    layoutParams = FrameLayout.LayoutParams(width, height).apply(block)
+}
+
+fun View.flexParams(width : Int = WRAPCONTENT, height: Int = WRAPCONTENT, block: (FlexboxLayout.LayoutParams).() -> Unit) {
+    layoutParams = FlexboxLayout.LayoutParams(width, height).apply(block)
+}
+
+fun View.constrainParams(width : Int = WRAPCONTENT, height: Int = WRAPCONTENT, block: (ConstraintLayout.LayoutParams).() -> Unit) {
+    layoutParams = ConstraintLayout.LayoutParams(width, height).apply(block)
+}
+
+
+fun View.viewgroupParams(width : Int = WRAPCONTENT, height: Int = WRAPCONTENT, block: (ViewGroup.LayoutParams).() -> Unit) {
+    layoutParams = ViewGroup.LayoutParams(width, height).apply(block)
 }
