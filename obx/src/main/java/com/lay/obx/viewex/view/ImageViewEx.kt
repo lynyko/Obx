@@ -5,6 +5,11 @@ import android.graphics.drawable.Drawable
 import android.view.ViewGroup
 import android.widget.ImageView
 
+fun ViewGroup.ImageView(init: ImageView.() -> Unit) {
+    addView(ImageView(context).apply {
+        init()
+    })
+}
 
 fun ViewGroup.ImageView(resId: Int, init: ImageView.() -> Unit) {
     addView(ImageView(context).apply {

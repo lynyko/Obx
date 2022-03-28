@@ -10,6 +10,12 @@ import com.google.android.flexbox.FlexboxLayout
 val MATHPARENT = ViewGroup.LayoutParams.MATCH_PARENT
 val WRAPCONTENT = ViewGroup.LayoutParams.WRAP_CONTENT
 
+inline fun <reified T : ViewGroup> T.View(init: (View).() -> Unit) {
+    addView(
+        View(context)
+            .apply(init))
+}
+
 /**
  * 设置View的高度
  */
@@ -60,7 +66,7 @@ fun View.margin(
     rightMargin: Int = Int.MAX_VALUE,
     bottomMargin: Int = Int.MAX_VALUE
 ): View {
-    val params = layoutParams as ViewGroup.MarginLayoutParams
+    val params = (layoutParams?:ViewGroup.MarginLayoutParams(WRAPCONTENT, WRAPCONTENT)) as ViewGroup.MarginLayoutParams
     if (leftMargin != Int.MAX_VALUE)
         params.leftMargin = leftMargin
     if (topMargin != Int.MAX_VALUE)
