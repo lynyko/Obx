@@ -15,12 +15,14 @@ data class ObxTriple<A : Any, B : Any, C : Any>(var first: A? = null, var second
 data class ObxMutil<T : Any>(var values : ArrayList<out T> = ArrayList()) {
     override fun toString() : String {
         val sb = StringBuilder()
+        sb.append("(")
         values.forEach {
             sb.append("$it,")
         }
         if(sb.isNotEmpty()){
             sb.deleteCharAt(sb.lastIndexOf(','))
         }
+        sb.append(")")
         return sb.toString()
     }
 }

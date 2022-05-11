@@ -31,6 +31,10 @@ fun <T : Any> Context.findObx(key : String) : Obx<T>?{
     return ObxManager.instance.findWithLifecycleOwner(hashCode(), key)
 }
 
+fun <T : Any> Context.findObxAsync(key : String, block: (Obx<T>) -> Unit){
+    ObxManager.instance.findWithLifecycleOwner(hashCode(), key, block)
+}
+
 fun <T : Any> Context.findObx(clz : Class<T>) : Obx<T>?{
     val c = if(clz == Int::class.java) Integer::class.java else clz
     return findObx(c.name)
@@ -47,8 +51,22 @@ fun <T : Any> Obx<T>.subscribe(listener: OnDataChangeListener<T>): Obx<T> {
     return this
 }
 
-fun <T : Any> Obx<T>.init(block : () -> Unit): Obx<T> {
+fun <T : Any> Obx<T>.init(block : Obx<T>.() -> Unit): Obx<T> {
     block()
     ObxManager.instance.update(this)
     return this
+}
+
+fun Context.removeObx(key : String) : Boolean{
+    return ObxManager.instance.removeObx(hashCode(), key)
+}
+
+fun Context.removeObxs(vararg keys : String) : Boolean{
+    var result = true
+    keys.forEach {
+        if(!removeObx(it)){
+            result = false
+        }
+    }
+    return result
 }

@@ -54,3 +54,10 @@ fun ViewGroup.ConstraintLayout(init: (ConstraintLayout).() -> Unit) {
     addView(ConstraintLayout(context)
         .apply(init))
 }
+
+fun View.lp(){
+    val lp =  when(this.parent){
+        is LinearLayout -> LinearLayout.LayoutParams(WRAPCONTENT, WRAPCONTENT)
+        else -> ViewGroup.LayoutParams(WRAPCONTENT, WRAPCONTENT)
+    }
+}

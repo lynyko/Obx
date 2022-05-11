@@ -4,6 +4,7 @@ package com.lay.obx
 internal class ObxManager private constructor(){
     private val listenerMap = HashMap<Long, ArrayList<OnDataChangeListener<out Any>>>()
     private val obxMap = HashMap<Int, HashMap<String, Obx<out Any>>>()
+    private val needSubscribeObxMap = HashMap<Int, ArrayList<Pair<String, (Obx<out Any>) -> Unit>>>()
 
     companion object{
         val instance = ObxManager()
@@ -19,8 +20,34 @@ internal class ObxManager private constructor(){
             false
         } else {
             obxSubMap[obx.key] = obx
+            needSubscribeObxMap[hashCode]?.let {
+                val iterator = it.iterator()
+                var item : Pair<String, (Obx<out Any>) -> Unit>
+                while(iterator.hasNext()){
+                    item = iterator.next()
+                    if(item.first == obx.key){
+                        item.second.invoke(obx)
+                        iterator.remove()
+                    }
+                }
+            }
             true
         }
+    }
+
+    fun removeObx(hashCode : Int, key : String) : Boolean{
+        obxMap[hashCode]?.let {
+            return if(it.containsKey(key)){
+                it.remove(key)
+                if(it.isEmpty()){
+                    obxMap.remove(hashCode)
+                }
+                true
+            } else {
+                false
+            }
+        }
+        return false
     }
 
     fun removeObxWithLifecycleOwner(hashCode : Int){
@@ -41,6 +68,20 @@ internal class ObxManager private constructor(){
             }
         }
         return null
+    }
+
+    fun <T : Any> findWithLifecycleOwner(hashCode : Int, key : String, block: ((Obx<T>) -> Unit)){
+        val obxList = obxMap[hashCode]
+        if(obxList != null && obxList[key] != null){
+            block(obxList[key] as Obx<T>)
+        } else {
+            var list = needSubscribeObxMap[hashCode]
+            if(list == null){
+                list =  ArrayList()
+                needSubscribeObxMap[hashCode] = list
+            }
+            list.add(key to block as (Obx<out Any>) -> Unit)
+        }
     }
 
     fun <T : Any> subscribe(obx : Obx<T>, listener: OnDataChangeListener<T>){

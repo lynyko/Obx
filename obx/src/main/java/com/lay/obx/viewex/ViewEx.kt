@@ -78,6 +78,20 @@ fun View.margin(
     layoutParams = params
     return this
 }
+fun View.margin(
+    horizontalMargin: Int = Int.MAX_VALUE,
+    verticalMargin: Int = Int.MAX_VALUE,
+): View {
+    val params = layoutParams as ViewGroup.MarginLayoutParams
+    if (horizontalMargin != Int.MAX_VALUE)
+        params.leftMargin = horizontalMargin
+        params.rightMargin = horizontalMargin
+    if (verticalMargin != Int.MAX_VALUE)
+        params.topMargin = verticalMargin
+        params.bottomMargin = verticalMargin
+    layoutParams = params
+    return this
+}
 
 /**
  * 设置View的padding
@@ -109,6 +123,10 @@ fun View.paddingDp(
 ): View {
     setPadding(padding.dp, padding.dp, padding.dp, padding.dp)
     return this
+}
+
+fun View.lp(width : Int = WRAPCONTENT, height: Int = WRAPCONTENT){
+
 }
 
 fun View.linearParams(width : Int = WRAPCONTENT, height: Int = WRAPCONTENT, block: (LinearLayout.LayoutParams).() -> Unit) {
